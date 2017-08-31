@@ -1,0 +1,46 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+
+    <!-- Breakfast -->
+    <div class="col-sm-4">
+      <h4>Breakfast</h4>
+      <div id="breakfast-list"></div>
+    </div>
+
+    <!-- Lunch -->
+    <div class="col-sm-4">
+      <h4>Lunch</h4>
+      <div id="lunch-list"></div>
+    </div>
+
+    <!-- Dinner -->
+    <div class="col-sm-4">
+      <h4>Dinner</h4>
+      <div id="dinner-list"></div>
+    </div>
+
+  </div> <!-- ./row -->
+  <a href="{% url 'index' %}">Home</a>
+</div> <!-- ./container -->
+
+<script>
+  function makeUL(array) {
+    var list = document.createElement('ul');
+    for(var i = 0; i < array.length; i++) {
+        var item = document.createElement('li');
+        item.appendChild(document.createTextNode(array[i]));
+        list.appendChild(item);
+    }
+    return list;
+  }
+
+  document.getElementById('breakfast-list').appendChild(makeUL({{ breakfast|safe }}));
+  document.getElementById('lunch-list').appendChild(makeUL({{ lunch|safe }}));
+  document.getElementById('dinner-list').appendChild(makeUL({{ dinner|safe }}));
+
+</script>
+
+{% endblock %}
