@@ -1,46 +1,153 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-<div class="container">
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Modal1">
+  Launch demo modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="Modal1" tabindex="-1" role="dialog" aria-labelledby="Modal1" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="ModalLabel">rate these breakfast items</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <div class="row" style="">
+            <div class="col-12 portfolio-item" style="background-color:  inherit;">
+              <div class="padded-item">
+                <div class="portfolio-item-body">
+                  <h5 class="portfolio-item-title">scrambled eggs</h5>
+                  <p>Scrambled Eggs with soft cheese</p>
+                </div>
+                <span display: inline-block;>
+                  <button type="button" class="btn btn-danger btn-md bad" data-dismiss="modal">ew</button>
+                  <button type="button" class="btn btn-warning btn-md ok">meh</button>
+                  <button type="button" class="btn btn-success btn-md good">yum</button>
+                </span>
+              </div>
+            </div><!--/.portfoli-item-->
+
+            <div class="col-12 portfolio-item" style="background-color:  inherit;">
+              <div class="padded-item">
+                <div class="portfolio-item-body">
+                  <h5 class="portfolio-item-title">pumpkin blueberry waffles</h5>
+                  <p>Scrambled Eggs with soft cheese</p>
+                </div>
+                <span display: inline-block;>
+                  <button type="button" class="btn btn-danger btn-md bad" data-dismiss="modal">ew</button>
+                  <button type="button" class="btn btn-warning btn-md ok">meh</button>
+                  <button type="button" class="btn btn-success btn-md good">yum</button>
+                </span>
+              </div>
+            </div><!--/.portfoli-item-->
+
+          </div> <!-- ./row -->
+        </div> <!-- ./container-fluid -->
+      </div> <!-- modal-body -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-md" data-dismiss="modal">Later</button>
+        <!-- <button type="button" class="btn btn-warning btn-md">Save</button> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="container" style="height: 100%;">
   <div class="row">
 
     <!-- Breakfast -->
-    <div class="col-sm-4">
-      <h4>Breakfast</h4>
+    <div class="col-md-4" style="">
+      <h4>breakfast</h4>
       <div id="breakfast-list"></div>
     </div>
 
     <!-- Lunch -->
-    <div class="col-sm-4">
-      <h4>Lunch</h4>
+    <div class="col-md-4">
+      <h4>lunch</h4>
       <div id="lunch-list"></div>
     </div>
 
     <!-- Dinner -->
-    <div class="col-sm-4">
-      <h4>Dinner</h4>
+    <div class="col-md-4">
+      <h4>dinner</h4>
       <div id="dinner-list"></div>
     </div>
 
   </div> <!-- ./row -->
-  <a href="{% url 'index' %}">Home</a>
 </div> <!-- ./container -->
 
 <script>
+
+  // Insert ul of food items
   function makeUL(array) {
     var list = document.createElement('ul');
+    list.className += " list-group";
     for(var i = 0; i < array.length; i++) {
         var item = document.createElement('li');
+        item.className += " list-group-item";
         item.appendChild(document.createTextNode(array[i]));
         list.appendChild(item);
     }
     return list;
   }
 
+  // Ask for ratings of food items
+  function askRating(meal, list) {
+    var notRatedList = []
+    for (var item in list) {
+      item = list[item]
+      if(!itemAlreadyRated(item)) {
+        notRatedList.push(item)
+      }
+    }
+    if (notRatedList.length > 0) {
+      showRatingModal(meal, notRatedList)
+    }
+  }
+
+  function showRatingModal(meal, list) {
+    //Format the modal
+    for (var item in list) {
+
+    }
+
+    //display the modal
+    $('#Modal1').modal('toggle')
+  }
+
+  // Check Firebase to see if item has already been rated
+  function itemAlreadyRated(item) {
+
+    return false;
+  }
+
   document.getElementById('breakfast-list').appendChild(makeUL({{ breakfast|safe }}));
   document.getElementById('lunch-list').appendChild(makeUL({{ lunch|safe }}));
   document.getElementById('dinner-list').appendChild(makeUL({{ dinner|safe }}));
 
+  if (window.jQuery) {
+        // jQuery is loaded
+        askRating('breakfast', {{ breakfast|safe }})
+    } else {
+        // jQuery is not loaded
+        alert("Update jQuery");
+    }
 </script>
+{% endblock %}
 
+{% block footer %}
+<footer class="footer">
+  <div class="container">
+    <span class="text-muted"><a href="{% url 'index' %}">take me home</a></span>
+  </div>
+</footer>
 {% endblock %}
